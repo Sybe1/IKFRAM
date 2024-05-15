@@ -1,13 +1,16 @@
-import {Pressable, StyleSheet, Text, View} from "react-native";
+import {Image, ImageBackground, Pressable, StyleSheet, Text, View} from "react-native";
 
-function CategoryGridTile({title, color, onPress}) {
+function CategoryGridTile({title, background, onPress}) {
     return(
         <View style={styles.gridItem}>
             <Pressable
                 style={({pressed}) => [styles.button, pressed ? styles.buttonPressed : null]}
                 onPress={onPress}
             >
-                <View style={[styles.innerContainer, {backgroundColor: color}]}>
+                <View style={styles.imageContainer}>
+                    <Image style={styles.tinyLogo} source={{uri: background}}/>
+                </View>
+                <View style={styles.innerContainer}>
                     <Text style={styles.title}>{title}</Text>
                 </View>
             </Pressable>
@@ -44,5 +47,12 @@ const styles = StyleSheet.create({
     },
     buttonPressed: {
         opacity: 0.8,
+    },
+    imageContainer: {
+
+    },
+    tinyLogo: {
+        width: 50,
+        height: 50,
     },
 });

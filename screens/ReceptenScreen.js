@@ -6,13 +6,12 @@ function ReceptenScreen({ navigation }) {
     function renderCategoryItem(itemData){
         function pressHandler() {
             navigation.navigate('ReceptInformatie');
-            console.log("ja")
         }
 
         return(
             <CategoryGridTile
                 title={itemData.item.title}
-                color={itemData.item.color}
+                background={itemData.item.image}
                 onPress={() => pressHandler()}
             />
         );
