@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {ImageBackground, StatusBar, StyleSheet, Text, View} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import { useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
+import ReceptenScreen from "./screens/ReceptenScreen";
+import ReceptInformatieScreen from "./screens/ReceptInformatieScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [userNumber, setUserNumber] = useState();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <>
+        <StatusBar style="dark" />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Recepten" component={ReceptenScreen} />
+            <Stack.Screen name="ReceptInformatie" component={ReceptInformatieScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
