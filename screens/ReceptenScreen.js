@@ -11,8 +11,10 @@ function ReceptenScreen({ navigation }) {
         return(
             <CategoryGridTile
                 title={itemData.item.title}
-                background={itemData.item.image}
-                onPress={() => pressHandler()}
+                id={itemData.item.id}
+                description={itemData.item.description}
+                image={itemData.item.image}
+                // onPress={() => pressHandler()}
             />
         );
     }
@@ -22,7 +24,7 @@ function ReceptenScreen({ navigation }) {
             data={CATEGORIES}
             keyExtractor={(item) => item.id}
             renderItem={renderCategoryItem}
-            numColumns={3}
+            numColumns={1}
         />
     )
 }

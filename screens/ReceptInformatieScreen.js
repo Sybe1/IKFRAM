@@ -1,10 +1,16 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {useRoute} from "@react-navigation/native";
+import Category from "../models/category";
 
 
 function ReceptInformatieScreen() {
+    const route = useRoute();
+    const {id, title, description, image} = route.params;
+
     return (
         <View style={styles.container}>
-            <Text>Meals Overview Screenasd</Text>
+            <Image style={styles.tinyLogo} source={{uri: image}}/>
+            <Text>{description}</Text>
         </View>
     )
 }
@@ -15,5 +21,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
+        alignItems: "center"
     },
+    tinyLogo: {
+        marginBottom: 10,
+        width: 200,
+        height: 200,
+    }
 });
