@@ -1,6 +1,5 @@
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {useRoute} from "@react-navigation/native";
-import Category from "../models/category";
 
 
 function ReceptInformatieScreen() {

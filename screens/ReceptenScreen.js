@@ -1,27 +1,31 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {CATEGORIES} from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
+import {useEffect, useState} from "react";
+import {fetchRecepten} from "../service/ReceptService"
 
 function ReceptenScreen({ navigation }) {
+    const [recepten, setRecepten] = useState([]);
+
+    useEffect(() => {
+        fetchRecepten(setRecepten);
+        console.log("Recepten: ", recepten);
+    }, []);
     function renderCategoryItem(itemData){
-        function pressHandler() {
-            navigation.navigate('ReceptInformatie');
-        }
+
 
         return(
             <CategoryGridTile
-                title={itemData.item.title}
+                title={itemData.item.name}
                 id={itemData.item.id}
                 description={itemData.item.description}
-                image={itemData.item.image}
-                // onPress={() => pressHandler()}
+                image={itemData.item.imageUrl}
             />
         );
     }
 
     return (
         <FlatList
-            data={CATEGORIES}
+            data={recepten}
             keyExtractor={(item) => item.id}
             renderItem={renderCategoryItem}
             numColumns={1}
