@@ -1,8 +1,38 @@
-import {Image, ImageBackground, Pressable, StyleSheet, Text, View} from "react-native";
+import {Image, Pressable, StyleSheet, Text, View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
+import {useEffect, useState} from "react";
+import {fetchUserReceptenScore} from "../service/UserReceptService";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function CategoryGridTile({title, image, id, description}) {
     const navigation = useNavigation();
+    const [rating, setRating] = useState(0); // Initialiseer met 0
+
+    useEffect(() => {
+        const getScore = async () => {
+            try {
+                const score = await fetchUserReceptenScore(id);
+                setRating(score);
+            } catch (error) {
+                console.error("Error fetching recipe score:", error);
+            }
+        };
+
+        getScore();
+    }, [id]);
+
+    // Bereken het aantal sterren gebaseerd op de score
+    const calculateStars = (score) => {
+        if (score < 20) return 0;
+        if (score < 35) return 1;
+        if (score < 50) return 2;
+        if (score < 70) return 3;
+        if (score < 90) return 4;
+        return 5;
+    };
+
+    // Het aantal sterren om in te kleuren
+    const stars = calculateStars(rating);
 
     return(
         <View style={styles.gridItem}>
@@ -20,11 +50,22 @@ function CategoryGridTile({title, image, id, description}) {
                 </View>
                 <View style={styles.innerContainer}>
                     <Text style={styles.title}>{title}</Text>
+                    <View style={styles.starsContainer}>
+                        {[...Array(5)].map((_, index) => (
+                            <Icon
+                                key={index}
+                                name={index < stars ? "star" : "star-outline"}
+                                color="#FFD700" // Goudkleur voor ingekleurde sterren
+                                size={20}
+                            />
+                        ))}
+                    </View>
                 </View>
             </Pressable>
         </View>
     )
 }
+
 export default CategoryGridTile;
 
 const styles = StyleSheet.create({
@@ -63,5 +104,9 @@ const styles = StyleSheet.create({
         width: 360,
         height: 180,
         borderRadius: 10
+    },
+    starsContainer: {
+        flexDirection: 'row',
+        marginTop: 8,
     },
 });

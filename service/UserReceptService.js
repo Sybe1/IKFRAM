@@ -1,20 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosInstance from "../interceptor/axiosInterceptor";
 
-export const updateMood = async (receptId, mood) => {
+export const updateMood = async (recept) => {
     try {
-        const userId = await AsyncStorage.getItem('userID');
-        const ratingData = { id: { userId, receptId}, rating: mood };
 
-        axiosInstance.put('/userrecept', ratingData)
-            .then((response) => {
-                console.log('Beoordeling succesvol bijgewerkt:', response.data);
-            })
-            .catch((error) => {
-                console.error('Fout bij het bijwerken van de beoordeling:', error);
-            });
+        const ratingData = {
+            userId: recept.userId.id,
+            recipeId: recept.recipeId.id,
+            rating: recept.rating,
+            saved: recept.saved
+        };
+
+        console.log(ratingData)
+
+        const response = await axiosInstance.put(`/userrecipe/${recept.id}`, ratingData);
+
+        console.log('Beoordeling succesvol bijgewerkt:', response.data);
+
     } catch (error) {
-        console.error('Fout bij het ophalen van de gebruikers-ID:', error);
+        console.error('Fout bij het bijwerken van de beoordeling:', error);
     }
 };
 
@@ -38,7 +42,7 @@ export const fetchUserReceptenScore = async (receptId) => {
             return 0;
         }
 
-        const score = (perfectPercentage * 100) * 1.0 + (goodPercentage * 100) * 0.8 + (normalPercentage * 100) * 0.6 + (badPercentage * 100) * 0.4;
+        const score = (perfectPercentage * 100) + (goodPercentage * 100) * 0.8 + (normalPercentage * 100) * 0.6 + (badPercentage * 100) * 0.4;
 
         console.log(perfectPercentage + " " + goodPercentage + " " + normalPercentage + " " + badPercentage + " " + reallyBadPercentage)
         console.log("score: " + score)
@@ -64,5 +68,7 @@ export const fetchRecipesByUserId = async (setRecepten) => {
         throw error;
     }
 };
+
+
 
 
