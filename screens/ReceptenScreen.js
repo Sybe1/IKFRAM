@@ -16,6 +16,7 @@ function ReceptenScreen({ navigation }) {
         setSortBy('desc');
         const sortedRecepten = [...recepten].sort((a, b) => b.score - a.score);
         setRecepten(sortedRecepten);
+        console.log(sortedRecepten)
     };
 
     const sorteerOpRatingAsc = () => {
@@ -75,6 +76,10 @@ const styles = StyleSheet.create({
     },
     button: {
         margin: 5,
-        marginTop: 10
+        marginTop: 10,
+    },
+    selected: {
+        backgroundColor: 'black',
+        color: 'white',
     }
 });

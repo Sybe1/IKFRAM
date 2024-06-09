@@ -1,6 +1,6 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
-import {useNavigation} from "@react-navigation/native";
-import {useEffect, useState} from "react";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
+import {useCallback, useEffect, useState} from "react";
 import {fetchUserReceptenScore} from "../service/UserReceptService";
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -8,20 +8,21 @@ function CategoryGridTile({title, image, id, description}) {
     const navigation = useNavigation();
     const [rating, setRating] = useState(0); // Initialiseer met 0
 
-    useEffect(() => {
-        const getScore = async () => {
-            try {
-                const score = await fetchUserReceptenScore(id);
-                setRating(score);
-            } catch (error) {
-                console.error("Error fetching recipe score:", error);
-            }
-        };
+    useFocusEffect(
+        useCallback(() => {
+            const getScore = async () => {
+                try {
+                    const score = await fetchUserReceptenScore(id);
+                    setRating(score);
+                } catch (error) {
+                    console.error("Error fetching recipe score:", error);
+                }
+            };
 
-        getScore();
-    }, [id]);
+            getScore();
+        }, [id])
+    );
 
-    // Bereken het aantal sterren gebaseerd op de score
     const calculateStars = (score) => {
         if (score < 20) return 0;
         if (score < 35) return 1;
@@ -31,7 +32,6 @@ function CategoryGridTile({title, image, id, description}) {
         return 5;
     };
 
-    // Het aantal sterren om in te kleuren
     const stars = calculateStars(rating);
 
     return(

@@ -1,14 +1,15 @@
-import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
 import { fetchRecipesByUserId, updateMood } from "../service/UserReceptService";
 
 function ReceptInformatieScreen() {
     const route = useRoute();
-    const { id, title, description, image } = route.params;
+    const { id, title, description, image, cuisine } = route.params;
     const [recept, setRecept] = useState(null);
     const [liked, setLiked] = useState(false);
+    const windowWidth = Dimensions.get('window').width;
 
     useEffect(() => {
         fetchRecipesByUserId((fetchedRecepten) => {
@@ -34,25 +35,24 @@ function ReceptInformatieScreen() {
         if (!recept) return;
         let updatedRating = newRating;
         if (recept.rating === newRating) {
-            updatedRating = newRating - 1; // Verlaag de rating als deze al was geselecteerd
+            updatedRating = newRating - 1;
         }
         const updatedRecept = { ...recept, rating: updatedRating };
         setRecept(updatedRecept);
         updateMood(updatedRecept).then(r => console.log(r));
     };
 
-
     const renderRatingButton = (ratingValue) => {
         const isSelected = recept?.rating >= ratingValue;
         return (
             <TouchableOpacity
                 key={ratingValue}
-                style={[styles.spaceRatingButtons, isSelected ? styles.selectedButton : styles.ratingButton]}
+                style={[styles.ratingButton, isSelected ? styles.selectedButton : null]}
                 onPress={() => changeRating(ratingValue)}
             >
                 <Icon
                     name={isSelected ? "star" : "star-outline"}
-                    color={"black"}
+                    color={isSelected ? "#FCD000" : "#C4C4C4"}
                     size={25}
                 />
             </TouchableOpacity>
@@ -61,51 +61,66 @@ function ReceptInformatieScreen() {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.tinyLogo} source={{ uri: image }} />
-            <TouchableOpacity style={styles.iconButton} onPress={toggleLiked}>
-                <Icon name={liked ? "heart" : "heart-outline"} color="black" size={30} />
-            </TouchableOpacity>
-            <View style={styles.ratingButtonsCluster}>
-                {[1, 2, 3, 4, 5].map(renderRatingButton)}
+            <View style={styles.titlePosition}>
+                <Text style={styles.title}>{title}</Text>
             </View>
-            <Text>{description}</Text>
+            <Image style={[styles.image, { width: windowWidth }]} source={{ uri: image }} />
+            <View style={styles.flexRow}>
+                <TouchableOpacity style={styles.likeButton} onPress={toggleLiked}>
+                    <Icon name={liked ? "heart" : "heart-outline"} color="#FF6978" size={30} />
+                </TouchableOpacity>
+                <View style={styles.ratingContainer}>
+                    {[1, 2, 3, 4, 5].map(renderRatingButton)}
+                </View>
+            </View>
+
+            <Text style={styles.description}>{description}</Text>
         </View>
     );
 }
 
-export default ReceptInformatieScreen;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        alignItems: 'center'
     },
-    tinyLogo: {
-        marginBottom: 10,
-        width: 200,
-        height: 200,
+    image: {
+        height: 250,
+        marginBottom: 20,
     },
-    iconButton: {
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 10,
-        padding: 10,
-        backgroundColor: '#f0f0f0',
-        borderRadius: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
+    },
+    likeButton: {
+        marginLeft: 10,
+        marginBottom: 10,
+    },
+    ratingContainer: {
+        flexDirection: "row",
+        marginLeft: 'auto',
+        marginRight: 10,
+        marginBottom: 20,
     },
     ratingButton: {
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-    },
-    ratingButtonsCluster: {
-        flexDirection: "row",
+        marginHorizontal: 4,
     },
     selectedButton: {
-        paddingHorizontal: 10,
-        paddingVertical: 6,
+        color: "#FCD000",
     },
-    spaceRatingButtons: {
-        margin: 2,
+    description: {
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: "center",
+    },
+    flexRow: {
+        flexDirection: "row",
+        alignItems: 'center',
+    },
+    titlePosition: {
+        alignItems: 'center',
+        padding: 16,
     }
 });
+
+export default ReceptInformatieScreen;
