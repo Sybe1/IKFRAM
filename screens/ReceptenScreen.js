@@ -63,4 +63,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    buttonText: {
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: '2',
+        padding: 6,
+        borderRadius: 6
+    },
+    sortButtons: {
+        flexDirection: 'row',
+    },
+    button: {
+        margin: 5,
+        marginTop: 10
+    }
 });

@@ -20,7 +20,7 @@ export const updateMood = async (receptId, mood) => {
 
 export const fetchUserReceptenScore = async (receptId) => {
     try {
-        const response = await axiosInstance.get(`/userrecipe/${receptId}`);
+        const response = await axiosInstance.get(`/userrecipe/recipe/${receptId}`);
         const ratings = response.data;
 
         if (ratings.length === 0) {
@@ -48,5 +48,21 @@ export const fetchUserReceptenScore = async (receptId) => {
         return 0;
     }
 }
+
+export const fetchRecipesByUserId = async (setRecepten) => {
+    try {
+        const userId = await AsyncStorage.getItem('userID');
+        console.log("ditte: " + userId)
+        console.log(await AsyncStorage.getItem('userToken'))
+        const response = await axiosInstance.get(`/userrecipe/user/${userId}`);
+        const receptenData = response.data;
+
+        console.log(receptenData)
+        setRecepten(receptenData);
+    } catch (error) {
+        console.error('Fout bij het ophalen van recepten:', error);
+        throw error;
+    }
+};
 
 

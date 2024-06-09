@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import ReceptenScreen from "./screens/ReceptenScreen";
+import MenuScreen from "./screens/MenuScreen";
 import ReceptInformatieScreen from "./screens/ReceptInformatieScreen";
 import LoginScreen from "./screens/LoginScreen";
 
@@ -18,7 +18,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
               <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Recepten" component={ReceptenScreen} />
+              <Stack.Screen name="Recepten" component={MenuScreen} />
               <Stack.Screen name="ReceptInformatie" component={ReceptInformatieScreen} />
           </Stack.Navigator>
         </NavigationContainer>
