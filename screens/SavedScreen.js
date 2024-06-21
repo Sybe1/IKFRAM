@@ -13,7 +13,6 @@ function SavedScreen() {
                 await fetchRecipesByUserId((fetchedRecepten) => {
                     const savedRecepten = fetchedRecepten.filter(recipe => recipe.saved === true);
                     setRecepten(savedRecepten);
-                    console.log("Saved Recepten: ", savedRecepten);
                 });
             };
             fetchData();
@@ -22,10 +21,7 @@ function SavedScreen() {
     function renderCategoryItem(itemData){
         return(
             <CategoryGridTile
-                title={itemData.item.recipeId.name}
-                id={itemData.item.recipeId.id}
-                description={itemData.item.recipeId.description}
-                image={itemData.item.recipeId.imageUrl}
+                choosenRecipe = {itemData.item}
             />
         );
     }

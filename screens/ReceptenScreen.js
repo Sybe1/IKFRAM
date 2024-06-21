@@ -9,14 +9,12 @@ function ReceptenScreen({ navigation }) {
 
     useEffect(() => {
         fetchRecepten(setRecepten);
-        console.log("Recepten: ", recepten);
     }, []);
 
     const sorteerOpRatingDesc = () => {
         setSortBy('desc');
         const sortedRecepten = [...recepten].sort((a, b) => b.score - a.score);
         setRecepten(sortedRecepten);
-        console.log(sortedRecepten)
     };
 
     const sorteerOpRatingAsc = () => {
@@ -27,10 +25,7 @@ function ReceptenScreen({ navigation }) {
     function renderCategoryItem(itemData){
         return(
             <CategoryGridTile
-                title={itemData.item.name}
-                id={itemData.item.id}
-                description={itemData.item.description}
-                image={itemData.item.imageUrl}
+                choosenRecipe={itemData.item}
             />
         );
     }
@@ -67,7 +62,7 @@ const styles = StyleSheet.create({
     buttonText: {
         backgroundColor: 'white',
         borderColor: 'black',
-        borderWidth: '2',
+        borderWidth: 2,
         padding: 6,
         borderRadius: 6
     },

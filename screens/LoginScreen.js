@@ -33,7 +33,6 @@ const authenticateUser = (username, password, navigation) => {
                 return response.json();
             })
             .then((data) => {
-                console.log('Ingelogd!');
                 AsyncStorage.setItem('userToken', data.token);
                 AsyncStorage.setItem('userID', data.id);
                 navigation.navigate('Recepten');

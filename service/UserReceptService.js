@@ -3,20 +3,28 @@ import axiosInstance from "../interceptor/axiosInterceptor";
 
 export const updateMood = async (recept) => {
     try {
-
         const ratingData = {
             userId: recept.userId.id,
             recipeId: recept.recipeId.id,
             rating: recept.rating,
             saved: recept.saved
         };
+        await axiosInstance.put(`/userrecipe/${recept.id}`, ratingData);
+    } catch (error) {
+        console.error('Fout bij het bijwerken van de beoordeling:', error);
+    }
+};
 
-        console.log(ratingData)
-
-        const response = await axiosInstance.put(`/userrecipe/${recept.id}`, ratingData);
-
-        console.log('Beoordeling succesvol bijgewerkt:', response.data);
-
+export const addMood = async (recipeId, rating, saved) => {
+    const userId = await AsyncStorage.getItem('userID');
+    try {
+        const ratingData = {
+            userId: userId,
+            recipeId: recipeId,
+            rating: rating,
+            saved: saved
+        };
+        await axiosInstance.post(`/userrecipe`, ratingData);
     } catch (error) {
         console.error('Fout bij het bijwerken van de beoordeling:', error);
     }
@@ -42,11 +50,7 @@ export const fetchUserReceptenScore = async (receptId) => {
             return 0;
         }
 
-        const score = (perfectPercentage * 100) + (goodPercentage * 100) * 0.8 + (normalPercentage * 100) * 0.6 + (badPercentage * 100) * 0.4;
-
-        console.log(perfectPercentage + " " + goodPercentage + " " + normalPercentage + " " + badPercentage + " " + reallyBadPercentage)
-        console.log("score: " + score)
-        return score;
+        return (perfectPercentage * 100) + (goodPercentage * 100) * 0.8 + (normalPercentage * 100) * 0.6 + (badPercentage * 100) * 0.4;
     } catch (error) {
         console.error("Error fetching user's recept score:", error);
         return 0;
@@ -56,12 +60,9 @@ export const fetchUserReceptenScore = async (receptId) => {
 export const fetchRecipesByUserId = async (setRecepten) => {
     try {
         const userId = await AsyncStorage.getItem('userID');
-        console.log("ditte: " + userId)
-        console.log(await AsyncStorage.getItem('userToken'))
         const response = await axiosInstance.get(`/userrecipe/user/${userId}`);
         const receptenData = response.data;
 
-        console.log(receptenData)
         setRecepten(receptenData);
     } catch (error) {
         console.error('Fout bij het ophalen van recepten:', error);

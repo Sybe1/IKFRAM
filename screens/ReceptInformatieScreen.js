@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useRoute } from '@react-navigation/native';
-import { fetchRecipesByUserId, updateMood } from "../service/UserReceptService";
+import {useRoute} from '@react-navigation/native';
+import {addMood, fetchRecipesByUserId, updateMood} from "../service/UserReceptService";
 
 function ReceptInformatieScreen() {
     const route = useRoute();
-    const { id, title, description, image, cuisine } = route.params;
+    const {choosenRecipe } = route.params;
     const [recept, setRecept] = useState(null);
     const [liked, setLiked] = useState(false);
     const windowWidth = Dimensions.get('window').width;
 
     useEffect(() => {
         fetchRecipesByUserId((fetchedRecepten) => {
-            const matchedRecipe = fetchedRecepten.find(recipe => recipe.recipeId.id === id);
+            const matchedRecipe = fetchedRecepten.find(recipe => recipe.recipeId.id === choosenRecipe.id);
             setRecept(matchedRecipe);
             if (matchedRecipe?.saved) {
                 setLiked(true);
@@ -22,24 +22,34 @@ function ReceptInformatieScreen() {
                 setRecept(matchedRecipe);
             }
         });
-    }, [id]);
+    }, [choosenRecipe.id]);
 
     const toggleLiked = () => {
-        if (!recept) return;
         setLiked(prevLiked => !prevLiked);
-        recept.saved = !recept.saved;
-        updateMood(recept).then(r => console.log(r));
+        if (!recept){
+            addMood(choosenRecipe.id, null, liked).then(r => console.log("toegevoegd"))
+        }
+        else{
+            recept.saved = !recept.saved;
+            updateMood(recept).then(r => console.log("toegevoegd"));
+        }
     };
 
     const changeRating = (newRating) => {
-        if (!recept) return;
-        let updatedRating = newRating;
-        if (recept.rating === newRating) {
-            updatedRating = newRating - 1;
+        let updatedRecept
+        if (!recept){
+            updatedRecept = {
+                rating: newRating,
+                recipeId: choosenRecipe,
+                saved: false,
+            };
+            addMood(choosenRecipe.id, newRating, false).then(r => console.log("toegevoegd"))
         }
-        const updatedRecept = { ...recept, rating: updatedRating };
+        else{
+            updatedRecept = { ...recept, rating: newRating };
+            updateMood(updatedRecept).then(r => console.log("toegevoegd"));
+        }
         setRecept(updatedRecept);
-        updateMood(updatedRecept).then(r => console.log(r));
     };
 
     const renderRatingButton = (ratingValue) => {
@@ -62,9 +72,9 @@ function ReceptInformatieScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.titlePosition}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>{choosenRecipe.name}</Text>
             </View>
-            <Image style={[styles.image, { width: windowWidth }]} source={{ uri: image }} />
+            <Image style={[styles.image, { width: windowWidth }]} source={{ uri: choosenRecipe.image }} />
             <View style={styles.flexRow}>
                 <TouchableOpacity style={styles.likeButton} onPress={toggleLiked}>
                     <Icon name={liked ? "heart" : "heart-outline"} color="#FF6978" size={30} />
@@ -74,7 +84,7 @@ function ReceptInformatieScreen() {
                 </View>
             </View>
 
-            <Text style={styles.description}>{description}</Text>
+            <Text style={styles.description}>{choosenRecipe.description}</Text>
         </View>
     );
 }

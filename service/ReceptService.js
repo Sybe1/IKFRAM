@@ -12,8 +12,6 @@ export const fetchRecepten = async (setRecepten) => {
         });
 
         const updatedRecepten = await Promise.all(updatedReceptenPromises);
-
-        console.log(updatedRecepten);
         setRecepten(updatedRecepten);
     } catch (error) {
         console.error('Fout bij het ophalen van recepten:', error);

@@ -4,7 +4,7 @@ import {useCallback, useEffect, useState} from "react";
 import {fetchUserReceptenScore} from "../service/UserReceptService";
 import Icon from 'react-native-vector-icons/Ionicons';
 
-function CategoryGridTile({title, image, id, description}) {
+function CategoryGridTile({choosenRecipe}) {
     const navigation = useNavigation();
     const [rating, setRating] = useState(0); // Initialiseer met 0
 
@@ -12,7 +12,7 @@ function CategoryGridTile({title, image, id, description}) {
         useCallback(() => {
             const getScore = async () => {
                 try {
-                    const score = await fetchUserReceptenScore(id);
+                    const score = await fetchUserReceptenScore(choosenRecipe.id);
                     setRating(score);
                 } catch (error) {
                     console.error("Error fetching recipe score:", error);
@@ -20,7 +20,7 @@ function CategoryGridTile({title, image, id, description}) {
             };
 
             getScore();
-        }, [id])
+        }, [choosenRecipe.id])
     );
 
     const calculateStars = (score) => {
@@ -39,17 +39,14 @@ function CategoryGridTile({title, image, id, description}) {
             <Pressable
                 style={({pressed}) => [styles.button, pressed ? styles.buttonPressed : null]}
                 onPress={() => navigation.navigate('ReceptInformatie', {
-                    id: id,
-                    title: title,
-                    description: description,
-                    image: image
+                    choosenRecipe: choosenRecipe
                 })}
             >
                 <View style={styles.imageContainer}>
-                    <Image style={styles.tinyLogo} source={{uri: image}}/>
+                    <Image style={styles.tinyLogo} source={{uri: choosenRecipe.image}}/>
                 </View>
                 <View style={styles.innerContainer}>
-                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.title}>{choosenRecipe.name}</Text>
                     <View style={styles.starsContainer}>
                         {[...Array(5)].map((_, index) => (
                             <Icon
