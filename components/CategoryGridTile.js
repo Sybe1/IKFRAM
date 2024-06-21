@@ -10,6 +10,8 @@ function CategoryGridTile({choosenRecipe}) {
 
     useFocusEffect(
         useCallback(() => {
+            console.log(choosenRecipe)
+            console.log(choosenRecipe.imageUrl)
             const getScore = async () => {
                 try {
                     const score = await fetchUserReceptenScore(choosenRecipe.id);
@@ -43,7 +45,7 @@ function CategoryGridTile({choosenRecipe}) {
                 })}
             >
                 <View style={styles.imageContainer}>
-                    <Image style={styles.tinyLogo} source={{uri: choosenRecipe.image}}/>
+                    <Image style={styles.tinyLogo} source={{uri: choosenRecipe.imageUrl}}/>
                 </View>
                 <View style={styles.innerContainer}>
                     <Text style={styles.title}>{choosenRecipe.name}</Text>
@@ -52,7 +54,7 @@ function CategoryGridTile({choosenRecipe}) {
                             <Icon
                                 key={index}
                                 name={index < stars ? "star" : "star-outline"}
-                                color="#FFD700" // Goudkleur voor ingekleurde sterren
+                                color="#FFD700"
                                 size={20}
                             />
                         ))}
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 8,
+        elevation: 8,
     },
     button: {
         flex: 1

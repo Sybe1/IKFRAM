@@ -74,7 +74,7 @@ function ReceptInformatieScreen() {
             <View style={styles.titlePosition}>
                 <Text style={styles.title}>{choosenRecipe.name}</Text>
             </View>
-            <Image style={[styles.image, { width: windowWidth }]} source={{ uri: choosenRecipe.image }} />
+            <Image style={[styles.image, { width: windowWidth }]} source={{ uri: choosenRecipe.imageUrl }} />
             <View style={styles.flexRow}>
                 <TouchableOpacity style={styles.likeButton} onPress={toggleLiked}>
                     <Icon name={liked ? "heart" : "heart-outline"} color="#FF6978" size={30} />
