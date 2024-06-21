@@ -35,7 +35,7 @@ const authenticateUser = (username, password, navigation) => {
             .then((data) => {
                 AsyncStorage.setItem('userToken', data.token);
                 AsyncStorage.setItem('userID', data.id);
-                navigation.navigate('Recepten');
+                navigation.navigate('ReceptenStack');
             })
             .catch((error) => {
                 console.error('Fout bij het inloggen:', error);
