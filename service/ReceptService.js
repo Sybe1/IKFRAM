@@ -3,7 +3,7 @@ import {fetchUserReceptenScore} from "./UserReceptService"
 
 export const fetchRecepten = async (setRecepten) => {
     try {
-        const response = await axiosInstance.get('/recipe/all');
+        const response = await axiosInstance.get('/recipe');
         const receptenData = response.data;
 
         const updatedReceptenPromises = receptenData.map(async (recept) => {
