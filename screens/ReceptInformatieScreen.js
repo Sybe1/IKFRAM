@@ -18,9 +18,6 @@ function ReceptInformatieScreen() {
             if (matchedRecipe?.saved) {
                 setLiked(true);
             }
-            if (matchedRecipe?.rating) {
-                setRecept(matchedRecipe);
-            }
         });
     }, [choosenRecipe.id]);
 

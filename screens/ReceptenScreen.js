@@ -94,10 +94,10 @@ function ReceptenScreen({ navigation }) {
                     <View style={styles.dropdownContent}>
                         <View style={styles.sortButtons}>
                             <TouchableOpacity onPress={sorteerOpRatingAsc} style={styles.button}>
-                                <Text style={[styles.buttonText, sortBy === 'asc' && styles.selected]}>Rating ↑</Text>
+                                <Text style={[styles.buttonText, sortBy === 'asc' && styles.selected]}>Rating ↓</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={sorteerOpRatingDesc} style={styles.button}>
-                                <Text style={[styles.buttonText, sortBy === 'desc' && styles.selected]}>Rating ↓</Text>
+                                <Text style={[styles.buttonText, sortBy === 'desc' && styles.selected]}>Rating ↑</Text>
                             </TouchableOpacity>
                         </View>
 
