@@ -1,15 +1,37 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import CategoryGridTile from "../components/CategoryGridTile";
-import {useEffect, useState} from "react";
-import {fetchRecepten} from "../service/ReceptService"
+import { fetchRecepten } from "../service/ReceptService";
 
 function ReceptenScreen({ navigation }) {
     const [recepten, setRecepten] = useState([]);
     const [sortBy, setSortBy] = useState(null);
+    const [checkedCategories, setCheckedCategories] = useState({
+        Italiaans: true,
+        Indiaas: true,
+        Mexicaans: true,
+    });
 
     useEffect(() => {
         fetchRecepten(setRecepten);
     }, []);
+
+    // Filterfunctie gebaseerd op de geselecteerde checkboxes
+    const filterRecepten = useCallback(() => {
+        return recepten.filter(recept => {
+            if (checkedCategories.Italiaans && recept.cuisine === 'Italiaans') {
+                return true;
+            }
+            if (checkedCategories.Indiaas && recept.cuisine === 'Indiaas') {
+                return true;
+            }
+            if (checkedCategories.Mexicaans && recept.cuisine === 'Mexicaans') {
+                return true;
+            }
+            return false;
+        });
+    }, [checkedCategories, recepten]);
 
     const sorteerOpRatingDesc = () => {
         setSortBy('desc');
@@ -22,13 +44,32 @@ function ReceptenScreen({ navigation }) {
         const sortedRecepten = [...recepten].sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
         setRecepten(sortedRecepten);
     };
-    function renderCategoryItem(itemData){
-        return(
+
+    const renderCheckboxes = () => {
+        const labels = ['Italiaans', 'Indiaas', 'Mexicaans'];
+        return labels.map(label => (
+            <View key={label} style={styles.checkboxContainer}>
+                <CheckBox
+                    title={label}
+                    checked={checkedCategories[label]}
+                    onPress={() => {
+                        setCheckedCategories(prevState => ({
+                            ...prevState,
+                            [label]: !prevState[label]
+                        }));
+                    }}
+                />
+            </View>
+        ));
+    };
+
+    const renderCategoryItem = ({ item }) => {
+        return (
             <CategoryGridTile
-                choosenRecipe={itemData.item}
+                choosenRecipe={item}
             />
         );
-    }
+    };
 
     return (
         <View style={styles.container}>
@@ -40,8 +81,13 @@ function ReceptenScreen({ navigation }) {
                     <Text style={[styles.buttonText, sortBy === 'desc' && styles.selected]}>Rating ↓</Text>
                 </TouchableOpacity>
             </View>
+
+            <View style={styles.checkboxes}>
+                {renderCheckboxes()}
+            </View>
+
             <FlatList
-                data={recepten}
+                data={filterRecepten()}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderCategoryItem}
                 numColumns={1}
@@ -76,5 +122,14 @@ const styles = StyleSheet.create({
     selected: {
         backgroundColor: 'black',
         color: 'white',
-    }
+    },
+    checkboxes: {
+        flexDirection: 'row',
+        marginTop: 10,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 10,
+    },
 });

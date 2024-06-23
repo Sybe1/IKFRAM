@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useRoute} from '@react-navigation/native';
 import {addMood, fetchRecipesByUserId, updateMood} from "../service/UserReceptService";
@@ -83,8 +83,9 @@ function ReceptInformatieScreen() {
                     {[1, 2, 3, 4, 5].map(renderRatingButton)}
                 </View>
             </View>
-
-            <Text style={styles.description}>{choosenRecipe.description}</Text>
+            <ScrollView>
+                <Text style={styles.description}>{choosenRecipe.description}</Text>
+            </ScrollView>
         </View>
     );
 }
@@ -121,7 +122,9 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         lineHeight: 24,
-        textAlign: "center",
+        marginLeft: 16,
+        marginRight: 16,
+        marginBottom: 30
     },
     flexRow: {
         flexDirection: "row",

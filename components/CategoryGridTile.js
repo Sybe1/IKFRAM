@@ -10,8 +10,6 @@ function CategoryGridTile({choosenRecipe}) {
 
     useFocusEffect(
         useCallback(() => {
-            console.log("hier")
-            console.log(choosenRecipe.id)
             const getScore = async () => {
                 try {
                     const score = await fetchUserReceptenScore(choosenRecipe.id);
@@ -26,11 +24,10 @@ function CategoryGridTile({choosenRecipe}) {
     );
 
     const calculateStars = (score) => {
-        if (score < 20) return 0;
-        if (score < 35) return 1;
-        if (score < 50) return 2;
-        if (score < 70) return 3;
-        if (score < 90) return 4;
+        if (score <= 20) return 1;
+        if (score <= 40) return 2;
+        if (score <= 60) return 3;
+        if (score <= 80) return 4;
         return 5;
     };
 
