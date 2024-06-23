@@ -60,7 +60,9 @@ export const fetchUserReceptenScore = async (receptId) => {
 export const fetchRecipesByUserId = async (setRecepten) => {
     try {
         const userId = await AsyncStorage.getItem('userID');
+        console.log(userId)
         const response = await axiosInstance.get(`/userrecipe/user/${userId}`);
+        console.log(response.data)
         const receptenData = response.data;
 
         setRecepten(receptenData);

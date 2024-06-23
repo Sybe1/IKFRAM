@@ -3,6 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 import {fetchRecipesByUserId} from "../service/UserReceptService";
 import CategoryGridTile from "../components/CategoryGridTile";
 import {useFocusEffect} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SavedScreen() {
     const [recepten, setRecepten] = useState([]);
@@ -21,7 +22,7 @@ function SavedScreen() {
     function renderCategoryItem(itemData){
         return(
             <CategoryGridTile
-                choosenRecipe = {itemData.item}
+                choosenRecipe = {itemData.item.recipeId}
             />
         );
     }

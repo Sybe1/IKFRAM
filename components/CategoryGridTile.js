@@ -6,12 +6,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 function CategoryGridTile({choosenRecipe}) {
     const navigation = useNavigation();
-    const [rating, setRating] = useState(0); // Initialiseer met 0
+    const [rating, setRating] = useState(0);
 
     useFocusEffect(
         useCallback(() => {
-            console.log(choosenRecipe)
-            console.log(choosenRecipe.imageUrl)
+            console.log("hier")
+            console.log(choosenRecipe.id)
             const getScore = async () => {
                 try {
                     const score = await fetchUserReceptenScore(choosenRecipe.id);
