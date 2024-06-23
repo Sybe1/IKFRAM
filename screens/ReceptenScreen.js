@@ -13,13 +13,13 @@ function ReceptenScreen({ navigation }) {
 
     const sorteerOpRatingDesc = () => {
         setSortBy('desc');
-        const sortedRecepten = [...recepten].sort((a, b) => b.score - a.score);
+        const sortedRecepten = [...recepten].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
         setRecepten(sortedRecepten);
     };
 
     const sorteerOpRatingAsc = () => {
         setSortBy('asc');
-        const sortedRecepten = [...recepten].sort((a, b) => a.score - b.score);
+        const sortedRecepten = [...recepten].sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
         setRecepten(sortedRecepten);
     };
     function renderCategoryItem(itemData){
