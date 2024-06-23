@@ -27,7 +27,7 @@ function ReceptInformatieScreen() {
     const toggleLiked = () => {
         setLiked(prevLiked => !prevLiked);
         if (!recept){
-            addMood(choosenRecipe.id, null, liked).then(r => console.log("toegevoegd"))
+            addMood(choosenRecipe.id, null, true).then(r => console.log("toegevoegd"))
         }
         else{
             recept.saved = !recept.saved;
