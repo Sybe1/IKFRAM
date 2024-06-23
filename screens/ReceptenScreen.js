@@ -12,12 +12,12 @@ function ReceptenScreen({ navigation }) {
         Indiaas: true,
         Mexicaans: true,
     });
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(() => {
         fetchRecepten(setRecepten);
     }, []);
 
-    // Filterfunctie gebaseerd op de geselecteerde checkboxes
     const filterRecepten = useCallback(() => {
         return recepten.filter(recept => {
             if (checkedCategories.Italiaans && recept.cuisine === 'Italiaans') {
@@ -47,20 +47,24 @@ function ReceptenScreen({ navigation }) {
 
     const renderCheckboxes = () => {
         const labels = ['Italiaans', 'Indiaas', 'Mexicaans'];
-        return labels.map(label => (
-            <View key={label} style={styles.checkboxContainer}>
-                <CheckBox
-                    title={label}
-                    checked={checkedCategories[label]}
-                    onPress={() => {
-                        setCheckedCategories(prevState => ({
-                            ...prevState,
-                            [label]: !prevState[label]
-                        }));
-                    }}
-                />
+        return (
+            <View>
+                {labels.map(label => (
+                    <View key={label} style={styles.checkbox}>
+                        <CheckBox
+                            title={label}
+                            checked={checkedCategories[label]}
+                            onPress={() => {
+                                setCheckedCategories(prevState => ({
+                                    ...prevState,
+                                    [label]: !prevState[label]
+                                }));
+                            }}
+                        />
+                    </View>
+                ))}
             </View>
-        ));
+        );
     };
 
     const renderCategoryItem = ({ item }) => {
@@ -71,27 +75,43 @@ function ReceptenScreen({ navigation }) {
         );
     };
 
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
+
     return (
         <View style={styles.container}>
-            <View style={styles.sortButtons}>
-                <TouchableOpacity onPress={sorteerOpRatingAsc} style={styles.button}>
-                    <Text style={[styles.buttonText, sortBy === 'asc' && styles.selected]}>Rating ↑</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={sorteerOpRatingDesc} style={styles.button}>
-                    <Text style={[styles.buttonText, sortBy === 'desc' && styles.selected]}>Rating ↓</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.checkboxes}>
-                {renderCheckboxes()}
-            </View>
-
             <FlatList
                 data={filterRecepten()}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderCategoryItem}
                 numColumns={1}
             />
+
+            {dropdownOpen && (
+                <View style={styles.dropdown}>
+
+                    <View style={styles.dropdownContent}>
+                        <View style={styles.sortButtons}>
+                            <TouchableOpacity onPress={sorteerOpRatingAsc} style={styles.button}>
+                                <Text style={[styles.buttonText, sortBy === 'asc' && styles.selected]}>Rating ↑</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={sorteerOpRatingDesc} style={styles.button}>
+                                <Text style={[styles.buttonText, sortBy === 'desc' && styles.selected]}>Rating ↓</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View>
+                            {renderCheckboxes()}
+                        </View>
+                    </View>
+                </View>
+            )}
+
+            {/* Dropdown toggle button */}
+            <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownToggle}>
+                <Text style={styles.dropdownToggleText}>{dropdownOpen ? 'Close Menu' : 'Open Menu'}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -114,6 +134,7 @@ const styles = StyleSheet.create({
     },
     sortButtons: {
         flexDirection: 'row',
+        justifyContent: 'center',
     },
     button: {
         margin: 5,
@@ -123,13 +144,47 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         color: 'white',
     },
-    checkboxes: {
-        flexDirection: 'row',
-        marginTop: 10,
+    checkbox: {
+        width: '100%',
     },
-    checkboxContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    dropdown: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+        paddingTop: 60,
+    },
+    dropdownContent: {
+        backgroundColor: '#fff',
+        padding: 10,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        width: '60%',
+        marginTop: 10,
         marginRight: 10,
+        marginBottom: 10,
+    },
+    closeButton: {
+        alignSelf: 'flex-end',
+        marginRight: 10,
+        marginTop: 10,
+        padding: 5,
+    },
+    closeButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    dropdownToggle: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        padding: 10,
+        backgroundColor: '#DDDDDD',
+        borderRadius: 5,
+    },
+    dropdownToggleText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
