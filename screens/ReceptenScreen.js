@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { CheckBox } from 'react-native-elements';
 import CategoryGridTile from "../components/CategoryGridTile";
 import { fetchRecepten } from "../service/ReceptService";
+import {useFocusEffect} from "@react-navigation/native";
 
 function ReceptenScreen({ navigation }) {
     const [recepten, setRecepten] = useState([]);
@@ -14,9 +15,11 @@ function ReceptenScreen({ navigation }) {
     });
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    useEffect(() => {
-        fetchRecepten(setRecepten);
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchRecepten(setRecepten);
+        }, [])
+    );
 
     const filterRecepten = useCallback(() => {
         return recepten.filter(recept => {
