@@ -26,7 +26,6 @@ export const authenticateUser = (username, password, navigation) => {
                 navigation.navigate('ReceptenStack');
             })
             .catch((error) => {
-                console.error('Fout bij het inloggen:', error);
                 Alert.alert('Fout', 'Fout bij het inloggen. Controleer uw gebruikersnaam en wachtwoord.');
             });
     } else {

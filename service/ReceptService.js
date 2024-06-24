@@ -1,5 +1,6 @@
 import axiosInstance from "../interceptor/axiosInterceptor";
 import {fetchUserReceptenScore} from "./UserReceptService"
+import {Alert} from "react-native";
 
 export const fetchRecepten = async (setRecepten) => {
     try {
@@ -14,7 +15,7 @@ export const fetchRecepten = async (setRecepten) => {
         const updatedRecepten = await Promise.all(updatedReceptenPromises);
         setRecepten(updatedRecepten);
     } catch (error) {
-        console.error('Fout bij het ophalen van recepten:', error);
+        Alert.alert('Fout', 'Fout bij het ophalen van recepten. Controleer uw verbinding.');
         throw error;
     }
 };

@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosInstance from "../interceptor/axiosInterceptor";
+import {Alert} from "react-native";
 
 export const updateMood = async (recept) => {
     try {
@@ -11,7 +12,7 @@ export const updateMood = async (recept) => {
         };
         await axiosInstance.put(`/userrecipe/${recept.id}`, ratingData);
     } catch (error) {
-        console.error('Fout bij het bijwerken van de beoordeling:', error);
+        Alert.alert('Fout', 'Fout bij het bijwerken van de beoordeling. Controleer uw verbinding.');
     }
 };
 
@@ -26,7 +27,7 @@ export const addMood = async (recipeId, rating, saved) => {
         };
         await axiosInstance.post(`/userrecipe`, ratingData);
     } catch (error) {
-        console.error('Fout bij het bijwerken van de beoordeling:', error);
+        Alert.alert('Fout', 'Fout bij het bijwerken van de beoordeling/saved status. Controleer uw verbinding.');
     }
 };
 
@@ -52,7 +53,7 @@ export const fetchUserReceptenScore = async (receptId) => {
 
         return (perfectPercentage * 100) + (goodPercentage * 100) * 0.8 + (normalPercentage * 100) * 0.6 + (badPercentage * 100) * 0.4;
     } catch (error) {
-        console.error("Error fetching user's recept score:", error);
+        Alert.alert('Fout', 'Fout bij het ophalen van de score van recepten. Controleer uw verbinding.');
         return 0;
     }
 }
@@ -65,7 +66,7 @@ export const fetchRecipesByUserId = async (setRecepten) => {
 
         setRecepten(receptenData);
     } catch (error) {
-        console.error('Fout bij het ophalen van recepten:', error);
+        Alert.alert('Fout', 'Fout bij het ophalen van recepten. Controleer uw verbinding.');
         throw error;
     }
 };
