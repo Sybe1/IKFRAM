@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import ReceptenScreen from './ReceptenScreen';
 import SavedScreen from './SavedScreen';
+import ToevoegenReceptScreen from './ToevoegenReceptScreen'
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,16 @@ export default function MenuScreen() {
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="restaurant-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Toevoegen"
+                component={ToevoegenReceptScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="add" color={color} size={size} />
                     ),
                 }}
             />

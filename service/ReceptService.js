@@ -20,4 +20,14 @@ export const fetchRecepten = async (setRecepten) => {
     }
 };
 
+export const addRecept = async (recept) => {
+    try {
+        const response = await axiosInstance.post('/recipe', recept);
+        return response.data;
+    } catch (error) {
+        Alert.alert('Fout', 'Fout bij het toevoegen van recepten. Controleer uw input en verbinding.');
+        throw error;
+    }
+};
+
 
