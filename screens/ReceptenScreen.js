@@ -112,7 +112,7 @@ function ReceptenScreen({ navigation }) {
             )}
 
             <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownToggle}>
-                <Text style={styles.dropdownToggleText}>{dropdownOpen ? 'Close Menu' : 'Open Menu'}</Text>
+                <Text style={styles.dropdownToggleText}>{dropdownOpen ? 'Close Filter' : 'Open Filter'}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -179,8 +179,15 @@ const styles = StyleSheet.create({
     },
     dropdownToggle: {
         position: 'absolute',
-        top: 20,
-        right: 20,
+        borderWidth: 1,
+        borderColor: 'grey',
+        shadowColor: 'black',
+        shadowOpacity: 0.25,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 8,
+        elevation: 8,
+        top: 6,
+        right: 15,
         padding: 10,
         backgroundColor: '#DDDDDD',
         borderRadius: 5,

@@ -83,7 +83,7 @@ function ReceptInformatieScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.titlePosition}>
                 <Text style={styles.title}>{choosenRecipe.name}</Text>
             </View>
@@ -96,10 +96,8 @@ function ReceptInformatieScreen() {
                     {[1, 2, 3, 4, 5].map(renderRatingButton)}
                 </View>
             </View>
-            <ScrollView>
-                <Text style={styles.description}>{choosenRecipe.description}</Text>
-            </ScrollView>
-        </View>
+            <Text style={styles.description}>{choosenRecipe.description}</Text>
+        </ScrollView>
     );
 }
 
