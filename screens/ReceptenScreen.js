@@ -108,7 +108,6 @@ function ReceptenScreen({ navigation }) {
                 </View>
             )}
 
-            {/* Dropdown toggle button */}
             <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownToggle}>
                 <Text style={styles.dropdownToggleText}>{dropdownOpen ? 'Close Menu' : 'Open Menu'}</Text>
             </TouchableOpacity>
