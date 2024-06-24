@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Image, Modal, Text, TouchableOpacity } from 'react-native';
+import {View, StyleSheet, TextInput, Button, Image, Modal, Text, TouchableOpacity, Alert} from 'react-native';
 import {addRecept} from "../service/ReceptService";
 
 const ToevoegenReceptScreen = () => {
@@ -12,17 +12,24 @@ const ToevoegenReceptScreen = () => {
     const cuisines = ['Indiaas', 'Italiaans', 'Mexicaans'];
 
     const handleSaveRecipe = () => {
-        console.log(name)
         const recept = {
             name: name,
             cuisine: cuisine,
             description: description,
             imageUrl: imageUrl
-        }
-        console.log(recept)
-       addRecept(recept).then(r =>
-           console.log(r)
-       );
+        };
+
+        addRecept(recept)
+            .then(() => {
+                setCuisine('');
+                setDescription('');
+                setName('');
+                setImageUrl('');
+                Alert.alert('Gelukt', 'Nieuwe recept toegevoegd!');
+            })
+            .catch(error => {
+                Alert.alert('Fout', 'Fout bij het toevoegen van recepten. Controleer uw input en verbinding.');
+            });
     };
 
     const selectCuisine = (cuisine) => {
