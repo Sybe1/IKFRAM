@@ -16,16 +16,9 @@ export const updateMood = async (recept) => {
     }
 };
 
-export const addMood = async (recipeId, rating, saved) => {
-    const userId = await AsyncStorage.getItem('userID');
+export const addMood = async (newRecept) => {
     try {
-        const ratingData = {
-            userId: userId,
-            recipeId: recipeId,
-            rating: rating,
-            saved: saved
-        };
-        await axiosInstance.post(`/userrecipe`, ratingData);
+        return await axiosInstance.post(`/userrecipe`, newRecept);
     } catch (error) {
         Alert.alert('Fout', 'Fout bij het bijwerken van de beoordeling/saved status. Controleer uw verbinding.');
     }

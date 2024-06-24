@@ -3,6 +3,7 @@ import {Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View}
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useRoute} from '@react-navigation/native';
 import {addMood, fetchRecipesByUserId, updateMood} from "../service/UserReceptService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function ReceptInformatieScreen() {
     const route = useRoute();
@@ -21,32 +22,47 @@ function ReceptInformatieScreen() {
         });
     }, [choosenRecipe.id]);
 
-    const toggleLiked = () => {
+    const makeRecept = async (newRating, saved) => {
+        const userId = await AsyncStorage.getItem('userID');
+        const newRecept = {
+            userId: userId,
+            rating: newRating,
+            recipeId: choosenRecipe.id,
+            saved: saved,
+        };
+        return newRecept;
+    }
+
+    const toggleLiked = async () => {
+        let updatedRecept
         setLiked(prevLiked => !prevLiked);
+
         if (!recept){
-            addMood(choosenRecipe.id, null, true).then(r => console.log("toegevoegd"))
+            updatedRecept = await makeRecept(null, true)
+            addMood(updatedRecept).then(r =>
+                setRecept(r.data)
+            )
         }
         else{
-            recept.saved = !recept.saved;
-            updateMood(recept).then(r => console.log("toegevoegd"));
+            let newSaved = !recept.saved;
+            updatedRecept = { ...recept, saved: newSaved };
+            updateMood(updatedRecept).then(r => console.log("toegevoegd"));
+            setRecept(updatedRecept);
         }
     };
 
-    const changeRating = (newRating) => {
+    const changeRating = async (newRating) => {
         let updatedRecept
-        if (!recept){
-            updatedRecept = {
-                rating: newRating,
-                recipeId: choosenRecipe,
-                saved: false,
-            };
-            addMood(choosenRecipe.id, newRating, false).then(r => console.log("toegevoegd"))
-        }
-        else{
-            updatedRecept = { ...recept, rating: newRating };
+        if (!recept) {
+            updatedRecept = await makeRecept(newRating, false)
+            addMood(updatedRecept).then(r =>
+                setRecept(r.data)
+            )
+        } else {
+            updatedRecept = {...recept, rating: newRating};
             updateMood(updatedRecept).then(r => console.log("toegevoegd"));
+            setRecept(updatedRecept);
         }
-        setRecept(updatedRecept);
     };
 
     const renderRatingButton = (ratingValue) => {
